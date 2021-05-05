@@ -6,11 +6,12 @@ args = parser.parse_args()
 
 rolename = "STSAccountAccess"
 # datalake accountId
-accountId = "123456784"
 
 total_months = args.months
 
-reference_filename = "cost_reference.csv"
-challenger_filename = "cost_challenger.csv"
+reference_filename_without_discount = "cost_reference_without_discount.csv"
+challenger_filename_without_discount = "cost_challenger_without_discount.csv"
+reference_filename_with_discount = "cost_reference_with_discount.csv"
+challenger_filename_with_discount = "cost_challenger_with_discount.csv"
 challenger_filename_before = "cost_challenger_before.csv"
 output_filename = "discrepancy_file.csv"
