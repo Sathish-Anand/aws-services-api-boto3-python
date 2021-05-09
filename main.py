@@ -2,12 +2,9 @@
 
 import boto3
 import awscost.getOrganisationCost as gtoc
-import awscost.getTenantCost as gttc
 import constants.csvFunctions as csv
 import constants.util as util
-from awscost.account_cost import AccountCost
 import constants.properties as prop
-import stsAccount.changeSTSaccount as stsa
 
 clientO = boto3.client('organizations')
 clientce = boto3.client('ce')
