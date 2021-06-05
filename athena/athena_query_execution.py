@@ -1,11 +1,8 @@
 import boto3
 import botocore
 import time
-import io
 import re
-import constants.csvFunctions as csv
-import athena.athenaCostQueries as acq
-import stsAccount.changeSTSaccount as stsa
+import stsaccount.change_sts_account as stsa
 
 session = boto3.Session()
 
@@ -45,18 +42,18 @@ def athena_to_s3(sts, params, query, filename, rolename, accountId, max_executio
 
     while (max_execution > 0 and state in ['RUNNING', 'QUEUED']):
         max_execution = max_execution - 1
-        response = client.get_query_execution(QueryExecutionId = execution_id)
+        response = client.get_query_execution(QueryExecutionId=execution_id)
         if 'QueryExecution' in response and \
                 'Status' in response['QueryExecution'] and \
                 'State' in response['QueryExecution']['Status']:
             state = response['QueryExecution']['Status']['State']
             print(state)
             if state == 'FAILED':
+                print(response['QueryExecution']['Status']['StateChangeReason'])
                 return False
             elif state == 'SUCCEEDED':
                 s3_path = response['QueryExecution']['ResultConfiguration']['OutputLocation']
                 source_filename = re.findall('.*\/(.*)', s3_path)[0]
-                csv.createAndWriteCsv(filename, '', '', '')
                 try:
                     s3.Bucket(params['bucket']).download_file(source_filename, filename)
                 except botocore.exceptions.ClientError as e:

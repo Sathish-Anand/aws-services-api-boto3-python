@@ -1,27 +1,23 @@
 #!/usr/bin/env python3.7
 
-import boto3
-import awscost.getOrganisationCost as gtoc
-import constants.csvFunctions as csv
-import constants.util as util
-import constants.properties as prop
+from multiprocessing import Pool
+import os
+import argparse
 
-clientO = boto3.client('organizations')
-clientce = boto3.client('ce')
-sts = boto3.client('sts')
+parser = argparse.ArgumentParser()
+parser.add_argument('--months', default=3)
+args = parser.parse_args()
 
-csv_list_header = [prop.reference_filename_without_discount, prop.reference_filename_with_discount, prop.challenger_filename_with_discount, prop.challenger_filename_without_discount, prop.output_filename]
+month = args.months
 
-def org_cost_comparison():
-    csv.createAndWriteCsvHeader(csv_list_header)
-    resultwd = gtoc.compareOrganisationCost(clientce, sts, False)
-    resultwod = gtoc.compareOrganisationCost(clientce, sts, True)
-    if resultwd=="Failed" or resultwod=="Failed":
-        raise AssertionError("Cost Comparison:", resultwd)
-    else:
-        print("All the cost comparison has successfully finished")
+processes = ('account_cost.py --months=%s' % (month),
+             'organisation_cost.py --months=%s' % (month),
+             'cloud_cost.py --months=%s' % (month),
+             'environment_cost.py --months=%s' % (month))
 
-current_dir = util.switch_workspace('Organization')
-org_cost_comparison()
-util.switch_back(current_dir)
+def run_process(process):
+    os.system('python3 {}'.format(process))
 
+agent=5
+pool = Pool(processes=agent)
+pool.map(run_process, processes)

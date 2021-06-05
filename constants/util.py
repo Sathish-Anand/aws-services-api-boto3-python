@@ -8,16 +8,14 @@ def roundoff(x, decimalpoints=1):
     except Exception:
         return x
 
-
 def switch_workspace(folder):
     current_dir = os.getcwd()
     dirpath = Path(current_dir, folder)
     if dirpath.exists() and dirpath.is_dir():
-        shutil.rmtree(dirpath)
-    os.makedirs(folder)
-    os.chdir(dirpath)
+        shutil.rmtree(str(dirpath))
+    os.makedirs(str(folder))
+    os.chdir(str(dirpath))
     return current_dir
 
-
 def switch_back(dir):
-    os.chdir(dir)
+    os.chdir(str(dir))
