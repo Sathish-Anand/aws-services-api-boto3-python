@@ -2,18 +2,20 @@
 
 This is to get the aws cost from CUR file and cost explorer values using boto3 SDK and compare the cost in different levels.
 
+![Testing Layer](Cost_testing.jpg)
+
 # How to setup
 
 - Install Python3 (e.g. `brew install python`)
 - Change into `test` directory
 - Create virtual environment:
-  
+
   ```bash
   python3 -m venv venv
   ```
   (this will create a `venv` directory under `test`)
-  
-- "Activate" virtual environment: 
+
+- "Activate" virtual environment:
   ```bash
   venv/bin/activate
   ```
@@ -39,4 +41,3 @@ python3 main.py --months=3
 # Jenkins run
 
 See [test/awscostandusage.groovy](test/awscostandusage.groovy) file.
-
